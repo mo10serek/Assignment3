@@ -21,12 +21,7 @@ class HillValleyDataGenerator(tf.keras.utils.Sequence):
         self.x = x / x.max(axis=0)
         self.y = data[:, -1]
 
-        x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(self.x, self.y, test_size=0.2)
-
-        optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
-        model.compile(optimizer=optimizer, loss="mean_squared_error")
-
-        model.fit(x=x_train, y=y_train, batch_size=batch_size, validation_split=0.2, epochs=5, verbose=2)
+        self.x_train, self.x_test, self.y_train, self.y_test = sklearn.model_selection.train_test_split(self.x, self.y, test_size=0.2)
 
         self.batch_size = batch_size
         self.epochs = 5
@@ -55,6 +50,12 @@ class HillValleyDataGenerator(tf.keras.utils.Sequence):
 # A function that creates a keras cnn model to predict whether a sequence has a hill or valley
 def hill_valley_cnn_model(dataset_filepath):
     # dataset_filepath is the path to a .data file containing the dataset
+
+    model = HillValleyDataGenerator(dataset_filepath, 20)
+
+    model.add(keras.layers.Conv2D(1, 5, input_shape=(100, 100, 1)))
+
+
 
     # model is a trained keras rnn model for predicting compressive strength
     # training_performance is the performance of the model on the training set

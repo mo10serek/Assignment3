@@ -97,9 +97,9 @@ def hill_valley_rnn_model(dataset_filepath):
     print(validation_performance)
     return model, training_performance, validation_performance
 
+
 hill_valley_rnn_model(cwd)
 
-# hill_valley_rnn_model(cwd)
 
 def compressive_strength_mode4a(filepath):
     testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
@@ -130,33 +130,23 @@ def compressive_strength_mode4b(filepath):
     trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
 
     model = keras.Sequential()
-    model.add(keras.layers.LSTM(50, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
     training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
 
     model = keras.Sequential()
-    model.add(keras.layers.LSTM(50, batch_input_shape=(6, 100, 1)))
-    model.add(keras.layers.Dense(50, activation="sigmoid"))
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.Dense(70, activation="sigmoid"))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
     training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
 
     model = keras.Sequential()
-    model.add(keras.layers.LSTM(50, batch_input_shape=(6, 100, 1)))
-    model.add(keras.layers.Dense(50, activation="sigmoid"))
-    model.add(keras.layers.Dense(10, activation="sigmoid"))
-    model.add(keras.layers.Dense(1, activation="sigmoid"))
-    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
-    validation_performance = model.evaluate(testHillValleyGenerator)
-
-    model = keras.Sequential()
-    model.add(keras.layers.LSTM(50, batch_input_shape=(6, 100, 1)))
-    model.add(keras.layers.Dense(50, activation="sigmoid"))
-    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.Dense(70, activation="sigmoid"))
     model.add(keras.layers.Dense(10, activation="sigmoid"))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
@@ -164,8 +154,18 @@ def compressive_strength_mode4b(filepath):
     validation_performance = model.evaluate(testHillValleyGenerator)
 
     model = keras.Sequential()
-    model.add(keras.layers.LSTM(50, batch_input_shape=(6, 100, 1)))
-    model.add(keras.layers.Dense(50, activation="sigmoid"))
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.Dense(70, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.Dense(1, activation="sigmoid"))
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    validation_performance = model.evaluate(testHillValleyGenerator)
+
+    model = keras.Sequential()
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.Dense(70, activation="sigmoid"))
     model.add(keras.layers.Dense(10, activation="sigmoid"))
     model.add(keras.layers.Dense(10, activation="sigmoid"))
     model.add(keras.layers.Dense(10, activation="sigmoid"))
@@ -173,6 +173,7 @@ def compressive_strength_mode4b(filepath):
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
     training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
+
 
 compressive_strength_mode4b(cwd)
 
@@ -207,9 +208,9 @@ def compressive_strength_mode4c_recurrent(filepath):
     epochs = [5, 10, 15, 20, 25, 30]
     for epoch in epochs:
         model = keras.Sequential()
-        model.add(keras.layers.LSTM(50, batch_input_shape=(6, 100, 1)))
-        model.add(keras.layers.Dense(50, activation="sigmoid"))
-        model.add(keras.layers.Dense(10, activation="sigmoid"))
+        model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+        model.add(keras.layers.Dense(70, activation="sigmoid"))
+        model.add(keras.layers.Dense(20, activation="sigmoid"))
         model.add(keras.layers.Dense(1, activation="sigmoid"))
 
         model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])

@@ -60,47 +60,44 @@ def hill_valley_cnn_model(dataset_filepath):
 
     model = keras.Sequential()
 
-    model.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='sigmoid', padding='same', batch_input_shape=(None,100,1)))
-    model.add(keras.layers.MaxPooling1D(pool_size=2))
-    model.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='sigmoid', padding='same'))
-    model.add(keras.layers.MaxPooling1D(pool_size=2))
+    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid', batch_input_shape=(None,100,1)))
+    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid'))
+    model.add(keras.layers.MaxPooling1D(pool_size=3))
+    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid'))
+    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid'))
+    model.add(keras.layers.MaxPooling1D(pool_size=3))
     model.add(tf.keras.layers.Flatten())
     model.add(keras.layers.Dense(256, activation="sigmoid"))
+    model.add(keras.layers.Dense(128, activation="sigmoid"))
+    model.add(keras.layers.Dense(64, activation="sigmoid"))
     model.add(keras.layers.Dense(1, activation='sigmoid'))
 
-    model.compile(optimizer='adam',
-                  loss='binary_crossentropy',
-                  metrics=['accuracy'])
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    training_performance = model.fit(trainingHillValleyGenerator,
-                                     epochs=20,
-                                     verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
 
-    validation_performance = model.evaluate(testHillValleyGenerator.x,
-                                            testHillValleyGenerator.y)
-
-    # model is a trained keras rnn model for predicting compressive strength
-    # training_performance is the performance of the model on the training set
-    # validation_performance is the performance of the model on the validation set
+    validation_performance = model.evaluate(testHillValleyGenerator)
+    print(validation_performance)
     return model, training_performance, validation_performance
 
-
-hill_valley_cnn_model(cwd)
+#hill_valley_cnn_model(cwd)
 
 
 # A function that creates a keras rnn model to predict whether a sequence has a hill or valley
 def hill_valley_rnn_model(dataset_filepath):
-    testHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Testing.data', 20)
-    trainingHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Training.data',
-                                                          20)
+    testHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+    trainingHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Training.data', 6)
 
-    model = keras.Sequential([
-        keras.layers.InputLayer(input_shape=(606, 100)),
-        keras.layers.LSTM(256),
-        keras.layers.Dense(256, activation="sigmoid")
-    ])
+    model = keras.Sequential()
+    model.add(keras.layers.LSTM(50, batch_input_shape=(6,100,1)))
+    model.add(keras.layers.Dense(50, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.Dense(1, activation="sigmoid"))
 
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    training_performance = model.evaluate(trainingHillValleyGenerator, verbose=0)
-    validation_performance = model.evaluate(testHillValleyGenerator, verbose=0)
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    validation_performance = model.evaluate(testHillValleyGenerator)
+    print(validation_performance)
     return model, training_performance, validation_performance
+
+hill_valley_rnn_model(cwd)

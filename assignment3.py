@@ -24,6 +24,7 @@ class HillValleyDataGenerator(tf.keras.utils.Sequence):
         self.x = self.data.values[:, :-1]
         self.y = self.data.values[:,-1]
         self.x = np.reshape(self.x, (606, 100))
+        sklearn.preprocessing.minmax_scale(self.x,feature_range=(0,1), axis=1, copy=False)
         # print(self.x.shape)
         # print(self.y.shape)
 
@@ -80,7 +81,7 @@ def hill_valley_cnn_model(dataset_filepath):
     print(validation_performance)
     return model, training_performance, validation_performance
 
-#hill_valley_cnn_model(cwd)
+hill_valley_cnn_model(cwd)
 
 
 # A function that creates a keras rnn model to predict whether a sequence has a hill or valley

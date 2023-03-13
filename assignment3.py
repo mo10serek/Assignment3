@@ -61,16 +61,10 @@ def hill_valley_cnn_model(dataset_filepath):
 
     model = keras.Sequential()
 
-    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid', batch_input_shape=(None,100,1)))
-    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid'))
-    model.add(keras.layers.MaxPooling1D(pool_size=3))
-    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid'))
-    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid'))
-    model.add(keras.layers.MaxPooling1D(pool_size=3))
+    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid', strides=5, batch_input_shape=(None,100,1)))
     model.add(tf.keras.layers.Flatten())
-    model.add(keras.layers.Dense(256, activation="sigmoid"))
-    model.add(keras.layers.Dense(128, activation="sigmoid"))
-    model.add(keras.layers.Dense(64, activation="sigmoid"))
+    model.add(keras.layers.Dense(20, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
     model.add(keras.layers.Dense(1, activation='sigmoid'))
 
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
@@ -101,4 +95,4 @@ def hill_valley_rnn_model(dataset_filepath):
     print(validation_performance)
     return model, training_performance, validation_performance
 
-hill_valley_rnn_model(cwd)
+#hill_valley_rnn_model(cwd)

@@ -66,7 +66,7 @@ def hill_valley_cnn_model(dataset_filepath):
     model.add(keras.layers.MaxPooling1D(pool_size=2))
     model.add(tf.keras.layers.Flatten())
     model.add(keras.layers.Dense(256, activation="sigmoid"))
-    model.add(keras.layers.Dense(2, activation='softmax'))
+    model.add(keras.layers.Dense(1, activation='sigmoid'))
 
     model.compile(optimizer='adam',
                   loss='binary_crossentropy',

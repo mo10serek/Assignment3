@@ -19,22 +19,19 @@ class HillValleyDataGenerator(tf.keras.utils.Sequence):
 
         self.data = pd.read_csv(dataset_filepath, sep=",")
 
-        # print(self.data)
+        # print(self.data.shape)
 
-        self.x = self.data.values[:, 0:-1]
-        self.y = self.data['class'].values
+        self.x = self.data.values[:, :-1]
+        self.y = self.data.values[:,-1]
         self.x = np.reshape(self.x, (606, 100))
-        print(self.x.shape)
+        # print(self.x.shape)
         # print(self.y.shape)
 
         # print(self.x)
         # print(self.y)
-
         self.number_of_images = len(self.x)
         self.batch_size = batch_size
-        self.epochs = 5
-
-        # Return nothing
+        return
 
     def __len__(self):
         # batches per epoch is the total number of batches used for one epoch
@@ -58,16 +55,18 @@ class HillValleyDataGenerator(tf.keras.utils.Sequence):
 def hill_valley_cnn_model(dataset_filepath):
     # dataset_filepath is the path to a .data file containing the dataset
 
-    testHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Testing.data', 20)
-    trainingHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Training.data',
-                                                          20)
+    testHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+    trainingHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Training.data', 6)
 
     model = keras.Sequential()
 
-    model.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='sigmoid', input_shape=(606, 100,)))
-    # model.add(keras.layers.MaxPooling2D(pool_size=2))
-    # model.add(keras.layers.Dense(256, activation="relu"))
-    # model.add(keras.layers.Dense(102, activation='softmax'))
+    model.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='sigmoid', input_shape=((6,100)), padding='same'))
+    model.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='sigmoid'))
+    model.add(keras.layers.MaxPooling1D(pool_size=2))
+    model.add(keras.layers.Dense(256, activation="sigmoid"))
+    model.add(keras.layers.Dense(2, activation='softmax'))
+
+    print("h")
 
     model.compile(optimizer='adam',
                   loss='binary_crossentropy',

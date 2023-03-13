@@ -70,7 +70,7 @@ def hill_valley_cnn_model(dataset_filepath):
 
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=10, verbose=2)
 
     validation_performance = model.evaluate(testHillValleyGenerator)
     print(validation_performance)
@@ -86,17 +86,18 @@ def hill_valley_rnn_model(dataset_filepath):
     trainingHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Training.data', 6)
 
     model = keras.Sequential()
-    model.add(keras.layers.LSTM(50, batch_input_shape=(6, 100, 1)))
-    model.add(keras.layers.Dense(50, activation="sigmoid"))
-    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6,100,1)))
+    model.add(keras.layers.Dense(70, activation="sigmoid"))
+    model.add(keras.layers.Dense(20, activation="sigmoid"))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
 
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=10, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
     print(validation_performance)
     return model, training_performance, validation_performance
 
+hill_valley_rnn_model(cwd)
 
 # hill_valley_rnn_model(cwd)
 

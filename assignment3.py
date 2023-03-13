@@ -60,20 +60,19 @@ def hill_valley_cnn_model(dataset_filepath):
 
     model = keras.Sequential()
 
-    model.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='sigmoid', input_shape=((6,100)), padding='same'))
-    model.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='sigmoid'))
+    model.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='sigmoid', padding='same', batch_input_shape=(None,100,1)))
     model.add(keras.layers.MaxPooling1D(pool_size=2))
+    model.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='sigmoid', padding='same'))
+    model.add(keras.layers.MaxPooling1D(pool_size=2))
+    model.add(tf.keras.layers.Flatten())
     model.add(keras.layers.Dense(256, activation="sigmoid"))
     model.add(keras.layers.Dense(2, activation='softmax'))
-
-    print("h")
 
     model.compile(optimizer='adam',
                   loss='binary_crossentropy',
                   metrics=['accuracy'])
 
-    training_performance = model.fit(trainingHillValleyGenerator.x,
-                                     trainingHillValleyGenerator.y,
+    training_performance = model.fit(trainingHillValleyGenerator,
                                      epochs=20,
                                      verbose=2)
 

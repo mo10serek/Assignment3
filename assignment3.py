@@ -22,9 +22,9 @@ class HillValleyDataGenerator(tf.keras.utils.Sequence):
         # print(self.data.shape)
 
         self.x = self.data.values[:, :-1]
-        self.y = self.data.values[:,-1]
+        self.y = self.data.values[:, -1]
         self.x = np.reshape(self.x, (606, 100))
-        sklearn.preprocessing.minmax_scale(self.x,feature_range=(0,1), axis=1, copy=False)
+        sklearn.preprocessing.minmax_scale(self.x, feature_range=(0, 1), axis=1, copy=False)
         # print(self.x.shape)
         # print(self.y.shape)
 
@@ -62,7 +62,8 @@ def hill_valley_cnn_model(dataset_filepath):
 
     model = keras.Sequential()
 
-    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid', strides=5, batch_input_shape=(None,100,1)))
+    model.add(keras.layers.Conv1D(filters=1, kernel_size=5, activation='sigmoid', strides=5,
+                                  batch_input_shape=(None, 100, 1)))
     model.add(tf.keras.layers.Flatten())
     model.add(keras.layers.Dense(20, activation="sigmoid"))
     model.add(keras.layers.Dense(10, activation="sigmoid"))
@@ -75,6 +76,7 @@ def hill_valley_cnn_model(dataset_filepath):
     validation_performance = model.evaluate(testHillValleyGenerator)
     print(validation_performance)
     return model, training_performance, validation_performance
+
 
 hill_valley_cnn_model(cwd)
 
@@ -98,4 +100,128 @@ def hill_valley_rnn_model(dataset_filepath):
     print(validation_performance)
     return model, training_performance, validation_performance
 
+
 hill_valley_rnn_model(cwd)
+
+
+def compressive_strength_mode4a(filepath):
+    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+    trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
+
+    kernel_sizes = [5, 10, 15, 20, 25, 30]
+    for kernel_size in kernel_sizes:
+        model = keras.Sequential()
+        model.add(keras.layers.Conv1D(filters=1, kernel_size=kernel_size, activation='sigmoid', strides=5,
+                                      batch_input_shape=(None, 100, 1)))
+        model.add(tf.keras.layers.Flatten())
+        model.add(keras.layers.Dense(20, activation="sigmoid"))
+        model.add(keras.layers.Dense(10, activation="sigmoid"))
+        model.add(keras.layers.Dense(1, activation='sigmoid'))
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        print("---------------------------")
+        print(f"kernel size: {kernel_size}")
+        print("---------------------------")
+        training_performance = model.fit(trainingHillValleyGenerator, epochs=2, verbose=2)
+        validation_performance = model.evaluate(testHillValleyGenerator)
+
+
+compressive_strength_mode4a(cwd)
+
+
+def compressive_strength_mode4b(filepath):
+    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+    trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
+
+    model = keras.Sequential()
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.Dense(1, activation="sigmoid"))
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    validation_performance = model.evaluate(testHillValleyGenerator)
+
+    model = keras.Sequential()
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.Dense(70, activation="sigmoid"))
+    model.add(keras.layers.Dense(1, activation="sigmoid"))
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    validation_performance = model.evaluate(testHillValleyGenerator)
+
+    model = keras.Sequential()
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.Dense(70, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.Dense(1, activation="sigmoid"))
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    validation_performance = model.evaluate(testHillValleyGenerator)
+
+    model = keras.Sequential()
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.Dense(70, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.Dense(1, activation="sigmoid"))
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    validation_performance = model.evaluate(testHillValleyGenerator)
+
+    model = keras.Sequential()
+    model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+    model.add(keras.layers.Dense(70, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.Dense(10, activation="sigmoid"))
+    model.add(keras.layers.Dense(1, activation="sigmoid"))
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    validation_performance = model.evaluate(testHillValleyGenerator)
+
+
+compressive_strength_mode4b(cwd)
+
+
+def compressive_strength_mode4c_convolutional(filepath):
+    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+    trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
+
+    epochs = [5, 10, 15, 20, 25, 30]
+    for epoch in epochs:
+        model = keras.Sequential()
+        model.add(keras.layers.Conv1D(filters=1, kernel_size=1, activation='sigmoid', strides=5,
+                                      batch_input_shape=(None, 100, 1)))
+        model.add(tf.keras.layers.Flatten())
+        model.add(keras.layers.Dense(10, activation="sigmoid"))
+        model.add(keras.layers.Dense(1, activation='sigmoid'))
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        print("---------------------------")
+        print(f"epochs: {epoch}")
+        print("---------------------------")
+        training_performance = model.fit(trainingHillValleyGenerator, epochs=epoch, verbose=2)
+        validation_performance = model.evaluate(testHillValleyGenerator)
+
+
+compressive_strength_mode4c_convolutional(cwd)
+
+
+def compressive_strength_mode4c_recurrent(filepath):
+    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+    trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
+
+    epochs = [5, 10, 15, 20, 25, 30]
+    for epoch in epochs:
+        model = keras.Sequential()
+        model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
+        model.add(keras.layers.Dense(70, activation="sigmoid"))
+        model.add(keras.layers.Dense(20, activation="sigmoid"))
+        model.add(keras.layers.Dense(1, activation="sigmoid"))
+
+        model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+        print("---------------------------")
+        print(f"epochs: {epoch}")
+        print("---------------------------")
+        training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+        validation_performance = model.evaluate(testHillValleyGenerator)
+
+
+compressive_strength_mode4c_recurrent(cwd)

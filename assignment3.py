@@ -84,9 +84,9 @@ hill_valley_cnn_model(cwd)
 # A function that creates a keras rnn model to predict whether a sequence has a hill or valley
 def hill_valley_rnn_model(dataset_filepath):
 
-    trainingHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Training.data', 6)
-    validationHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Validation.data', 6)
-    testHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+    trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
+    validationHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Validation.data', 6)
+    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
 
     model = keras.Sequential()
     model.add(keras.layers.LSTM(70, batch_input_shape=(6,100,1)))
@@ -105,8 +105,10 @@ hill_valley_rnn_model(cwd)
 
 
 def compressive_strength_mode4a(filepath):
-    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+
     trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
+    validationHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Validation.data', 6)
+    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
 
     kernel_sizes = [5, 10, 15, 20, 25, 30]
     for kernel_size in kernel_sizes:
@@ -121,7 +123,7 @@ def compressive_strength_mode4a(filepath):
         print("---------------------------")
         print(f"kernel size: {kernel_size}")
         print("---------------------------")
-        training_performance = model.fit(trainingHillValleyGenerator, epochs=2, verbose=2)
+        training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=2, verbose=2)
         validation_performance = model.evaluate(testHillValleyGenerator)
 
 
@@ -129,14 +131,16 @@ compressive_strength_mode4a(cwd)
 
 
 def compressive_strength_mode4b(filepath):
-    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+
     trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
+    validationHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Validation.data', 6)
+    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
 
     model = keras.Sequential()
     model.add(keras.layers.LSTM(70, batch_input_shape=(6, 100, 1)))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=20, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
 
     model = keras.Sequential()
@@ -144,7 +148,7 @@ def compressive_strength_mode4b(filepath):
     model.add(keras.layers.Dense(70, activation="sigmoid"))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=20, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
 
     model = keras.Sequential()
@@ -153,7 +157,7 @@ def compressive_strength_mode4b(filepath):
     model.add(keras.layers.Dense(10, activation="sigmoid"))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=20, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
 
     model = keras.Sequential()
@@ -163,7 +167,7 @@ def compressive_strength_mode4b(filepath):
     model.add(keras.layers.Dense(10, activation="sigmoid"))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=20, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
 
     model = keras.Sequential()
@@ -174,7 +178,7 @@ def compressive_strength_mode4b(filepath):
     model.add(keras.layers.Dense(10, activation="sigmoid"))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=20, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
 
 
@@ -182,8 +186,10 @@ compressive_strength_mode4b(cwd)
 
 
 def compressive_strength_mode4c_convolutional(filepath):
-    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+
     trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
+    validationHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Validation.data', 6)
+    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
 
     epochs = [5, 10, 15, 20, 25, 30]
     for epoch in epochs:
@@ -197,7 +203,7 @@ def compressive_strength_mode4c_convolutional(filepath):
         print("---------------------------")
         print(f"epochs: {epoch}")
         print("---------------------------")
-        training_performance = model.fit(trainingHillValleyGenerator, epochs=epoch, verbose=2)
+        training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=epoch, verbose=2)
         validation_performance = model.evaluate(testHillValleyGenerator)
 
 
@@ -205,8 +211,10 @@ compressive_strength_mode4c_convolutional(cwd)
 
 
 def compressive_strength_mode4c_recurrent(filepath):
-    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+
     trainingHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Training.data', 6)
+    validationHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Validation.data', 6)
+    testHillValleyGenerator = HillValleyDataGenerator(filepath + '/Hill_Valley_with_noise_Testing.data', 6)
 
     epochs = [5, 10, 15, 20, 25, 30]
     for epoch in epochs:
@@ -220,7 +228,7 @@ def compressive_strength_mode4c_recurrent(filepath):
         print("---------------------------")
         print(f"epochs: {epoch}")
         print("---------------------------")
-        training_performance = model.fit(trainingHillValleyGenerator, epochs=20, verbose=2)
+        training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=20, verbose=2)
         validation_performance = model.evaluate(testHillValleyGenerator)
 
 

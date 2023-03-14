@@ -56,8 +56,9 @@ class HillValleyDataGenerator(tf.keras.utils.Sequence):
 def hill_valley_cnn_model(dataset_filepath):
     # dataset_filepath is the path to a .data file containing the dataset
 
-    testHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Testing.data', 6)
     trainingHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Training.data', 6)
+    validationHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Validation.data', 6)
+    testHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Testing.data', 6)
 
     model = keras.Sequential()
 
@@ -69,7 +70,7 @@ def hill_valley_cnn_model(dataset_filepath):
 
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=10, verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=10, verbose=2)
 
     validation_performance = model.evaluate(testHillValleyGenerator)
     print(validation_performance)
@@ -80,8 +81,10 @@ hill_valley_cnn_model(cwd)
 
 # A function that creates a keras rnn model to predict whether a sequence has a hill or valley
 def hill_valley_rnn_model(dataset_filepath):
-    testHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Testing.data', 6)
+
     trainingHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Training.data', 6)
+    validationHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Validation.data', 6)
+    testHillValleyGenerator = HillValleyDataGenerator(dataset_filepath + '/Hill_Valley_with_noise_Testing.data', 6)
 
     model = keras.Sequential()
     model.add(keras.layers.LSTM(70, batch_input_shape=(6,100,1)))
@@ -90,7 +93,7 @@ def hill_valley_rnn_model(dataset_filepath):
     model.add(keras.layers.Dense(1, activation="sigmoid"))
 
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    training_performance = model.fit(trainingHillValleyGenerator, epochs=10, verbose=2)
+    training_performance = model.fit(trainingHillValleyGenerator, validation_data=validationHillValleyGenerator, epochs=10, verbose=2)
     validation_performance = model.evaluate(testHillValleyGenerator)
     print(validation_performance)
     return model, training_performance, validation_performance

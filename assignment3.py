@@ -23,7 +23,6 @@ class HillValleyDataGenerator(tf.keras.utils.Sequence):
 
         self.x = self.data.values[:, :-1]
         self.y = self.data.values[:, -1]
-        self.x = np.reshape(self.x, (606, 100))
         sklearn.preprocessing.minmax_scale(self.x, feature_range=(0, 1), axis=1, copy=False)
         # print(self.x.shape)
         # print(self.y.shape)
